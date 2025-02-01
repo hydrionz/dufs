@@ -1,12 +1,13 @@
 html {
-  font-family: -apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   color: #24292e;
 }
 
 body {
   /* prevent premature breadcrumb wrapping on mobile */
-  min-width: 500px;
+  min-width: 538px;
+  margin: 0;
 }
 
 .hidden {
@@ -17,36 +18,40 @@ body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 1em 1em 0;
+  padding: 0.6em 1em;
+  position: sticky;
+  top: 0;
+  background-color: white;
 }
 
 .breadcrumb {
   font-size: 1.25em;
   padding-right: 0.6em;
+  word-break: break-all;
 }
 
-.breadcrumb > a {
+.breadcrumb>a {
   color: #0366d6;
   text-decoration: none;
 }
 
-.breadcrumb > a:hover {
+.breadcrumb>a:hover {
   text-decoration: underline;
 }
 
 /* final breadcrumb */
-.breadcrumb > b {
+.breadcrumb>b {
   color: #24292e;
 }
 
-.breadcrumb > .separator {
+.breadcrumb>.separator {
   color: #586069;
   padding: 0 0.25em;
 }
 
 .breadcrumb svg {
   height: 100%;
-  fill: rgba(3,47,98,0.5);
+  fill: rgba(3, 47, 98, 0.5);
 }
 
 .toolbox {
@@ -54,9 +59,23 @@ body {
   margin-right: 10px;
 }
 
-.toolbox > div {
+.toolbox>a,
+.toolbox>div {
   /* vertically align with breadcrumb text */
   height: 1.1rem;
+}
+
+.toolbox .control {
+  cursor: pointer;
+  padding-left: 0.25em;
+}
+
+.upload-file input {
+  display: none;
+}
+
+.upload-file label {
+  cursor: pointer;
 }
 
 .searchbar {
@@ -78,7 +97,6 @@ body {
   font-size: 16px;
   line-height: 16px;
   padding: 1px;
-  font-family: helvetica neue,luxi sans,Tahoma,hiragino sans gb,STHeiti,sans-serif;
   background-color: transparent;
   border: none;
   outline: none;
@@ -90,26 +108,11 @@ body {
   cursor: pointer;
 }
 
-.upload-control {
-  cursor: pointer;
-  padding-left: 0.25em;
-}
-
-.upload-control input {
-  display: none;
-}
-
-.upload-status span {
-  width: 70px;
-  display: inline-block;
-}
-
 .main {
   padding: 0 1em;
 }
 
 .empty-folder {
-  padding-top: 1rem;
   font-style: italic;
 }
 
@@ -131,26 +134,45 @@ body {
   padding-left: 0.6em;
 }
 
+.cell-status span {
+  display: inline-block;
+}
+
+.paths-table thead a {
+  color: unset;
+  text-decoration: none;
+}
+
+.paths-table thead a>span {
+  padding-left: 2px;
+}
+
+.paths-table tbody tr:hover {
+  background-color: #fafafa;
+}
+
 .paths-table .cell-actions {
-  width: 60px;
+  width: 90px;
   display: flex;
-  padding-left: 0.6em;
+  padding-left: 0.5em;
 }
 
 .paths-table .cell-mtime {
   width: 120px;
-  padding-left: 0.6em;
+  padding-left: 0.5em;
+  font-variant-numeric: tabular-nums;
 }
 
 .paths-table .cell-size {
   text-align: right;
   width: 70px;
-  padding-left: 0.6em;
+  padding-left: 0.5em;
+  font-variant-numeric: tabular-nums;
 }
 
 .path svg {
-  height: 100%;
-  fill: rgba(3,47,98,0.5);
+  height: 16px;
+  fill: rgba(3, 47, 98, 0.5);
   padding-right: 0.5em;
   vertical-align: text-top;
 }
@@ -167,7 +189,7 @@ body {
   display: block;
   text-decoration: none;
   max-width: calc(100vw - 375px);
-  min-width: 200px;
+  min-width: 170px;
 }
 
 .path a:hover {
@@ -175,7 +197,8 @@ body {
 }
 
 .action-btn {
-  padding-left: 0.4em;
+  padding-right: 0.3em;
+  cursor: pointer;
 }
 
 .uploaders-table {
@@ -184,6 +207,47 @@ body {
 
 .uploader {
   padding-right: 1em;
+}
+
+.editor {
+  width: 100%;
+  height: calc(100vh - 5rem);
+  border: 1px solid #ced4da;
+  outline: none;
+  padding: 5px;
+}
+
+.toolbox-right {
+  margin-left: auto;
+  margin-right: 2em;
+}
+
+.login-btn {
+  cursor: pointer;
+}
+
+.save-btn {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.logout-btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.user-name {
+  padding-left: 3px;
+}
+
+.not-editable {
+  font-style: italic;
+}
+
+.retry-btn {
+  cursor: pointer;
 }
 
 @media (min-width: 768px) {
@@ -215,6 +279,10 @@ body {
     fill: #fff;
   }
 
+  .head {
+    background-color: #111;
+  }
+
   .searchbar {
     background-color: #111;
     border-color: #fff6;
@@ -227,4 +295,13 @@ body {
   .path a {
     color: #3191ff;
   }
-} 
+
+  .paths-table tbody tr:hover {
+    background-color: #1a1a1a;
+  }
+
+  .editor {
+    background: black;
+    color: white;
+  }
+}

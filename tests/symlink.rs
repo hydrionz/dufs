@@ -20,9 +20,9 @@ fn default_not_allow_symlink(server: TestServer, tmpdir: TempDir) -> Result<(), 
     let resp = reqwest::blocking::get(format!("{}{}/index.html", server.url(), dir))?;
     assert_eq!(resp.status(), 404);
     let resp = reqwest::blocking::get(server.url())?;
-    let paths = utils::retrive_index_paths(&resp.text()?);
+    let paths = utils::retrieve_index_paths(&resp.text()?);
     assert!(!paths.is_empty());
-    assert!(!paths.contains(&format!("{}/", dir)));
+    assert!(!paths.contains(&format!("{dir}/")));
     Ok(())
 }
 
@@ -39,8 +39,8 @@ fn allow_symlink(
     let resp = reqwest::blocking::get(format!("{}{}/index.html", server.url(), dir))?;
     assert_eq!(resp.status(), 200);
     let resp = reqwest::blocking::get(server.url())?;
-    let paths = utils::retrive_index_paths(&resp.text()?);
+    let paths = utils::retrieve_index_paths(&resp.text()?);
     assert!(!paths.is_empty());
-    assert!(paths.contains(&format!("{}/", dir)));
+    assert!(paths.contains(&format!("{dir}/")));
     Ok(())
 }

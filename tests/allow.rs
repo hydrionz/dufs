@@ -21,6 +21,13 @@ fn default_not_allow_delete(server: TestServer) -> Result<(), Error> {
 }
 
 #[rstest]
+fn default_not_allow_archive(server: TestServer) -> Result<(), Error> {
+    let resp = reqwest::blocking::get(format!("{}?zip", server.url()))?;
+    assert_eq!(resp.status(), 404);
+    Ok(())
+}
+
+#[rstest]
 fn default_not_exist_dir(server: TestServer) -> Result<(), Error> {
     let resp = reqwest::blocking::get(format!("{}404/", server.url()))?;
     assert_eq!(resp.status(), 404);
@@ -64,10 +71,22 @@ fn allow_upload_delete_can_override(#[with(&["-A"])] server: TestServer) -> Resu
 fn allow_search(#[with(&["--allow-search"])] server: TestServer) -> Result<(), Error> {
     let resp = reqwest::blocking::get(format!("{}?q={}", server.url(), "test.html"))?;
     assert_eq!(resp.status(), 200);
-    let paths = utils::retrive_index_paths(&resp.text()?);
+    let paths = utils::retrieve_index_paths(&resp.text()?);
     assert!(!paths.is_empty());
     for p in paths {
-        assert!(p.contains(&"test.html"));
+        assert!(p.contains("test.html"));
     }
+    Ok(())
+}
+
+#[rstest]
+fn allow_archive(#[with(&["--allow-archive"])] server: TestServer) -> Result<(), Error> {
+    let resp = reqwest::blocking::get(format!("{}?zip", server.url()))?;
+    assert_eq!(resp.status(), 200);
+    assert_eq!(
+        resp.headers().get("content-type").unwrap(),
+        "application/zip"
+    );
+    assert!(resp.headers().contains_key("content-disposition"));
     Ok(())
 }

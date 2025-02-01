@@ -1,10 +1,14 @@
-FROM rust:1.61 as builder
-RUN rustup target add x86_64-unknown-linux-musl
-RUN apt-get update && apt-get install --no-install-recommends -y musl-tools
-WORKDIR /app
+FROM --platform=linux/amd64 messense/rust-musl-cross:x86_64-musl AS amd64
 COPY . .
-RUN cargo build --target x86_64-unknown-linux-musl --release
+RUN cargo install --path . --root /
+
+FROM --platform=linux/amd64 messense/rust-musl-cross:aarch64-musl AS arm64
+COPY . .
+RUN cargo install --path . --root /
+
+FROM ${TARGETARCH} AS builder
 
 FROM scratch
-COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/dufs /bin/
+COPY --from=builder /bin/dufs /bin/dufs
+STOPSIGNAL SIGINT
 ENTRYPOINT ["/bin/dufs"]

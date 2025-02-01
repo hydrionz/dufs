@@ -7,31 +7,27 @@ use rstest::rstest;
 #[rstest]
 fn cors(#[with(&["--enable-cors"])] server: TestServer) -> Result<(), Error> {
     let resp = reqwest::blocking::get(server.url())?;
-
     assert_eq!(
         resp.headers().get("access-control-allow-origin").unwrap(),
         "*"
     );
     assert_eq!(
-        resp.headers().get("access-control-allow-headers").unwrap(),
-        "range, content-type, accept, origin, www-authenticate"
+        resp.headers()
+            .get("access-control-allow-credentials")
+            .unwrap(),
+        "true"
     );
-
-    Ok(())
-}
-
-#[rstest]
-fn cors_options(#[with(&["--enable-cors"])] server: TestServer) -> Result<(), Error> {
-    let resp = fetch!(b"OPTIONS", server.url()).send()?;
-
     assert_eq!(
-        resp.headers().get("access-control-allow-origin").unwrap(),
+        resp.headers().get("access-control-allow-methods").unwrap(),
         "*"
     );
     assert_eq!(
         resp.headers().get("access-control-allow-headers").unwrap(),
-        "range, content-type, accept, origin, www-authenticate"
+        "Authorization,*"
     );
-
+    assert_eq!(
+        resp.headers().get("access-control-expose-headers").unwrap(),
+        "Authorization,*"
+    );
     Ok(())
 }
